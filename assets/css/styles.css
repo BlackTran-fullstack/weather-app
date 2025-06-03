@@ -3,14 +3,207 @@
 
     margin: 0;
     padding: 0;
-
-    font-family: "Poppins", sans-serif;
 }
 
 html {
     font-size: 62.5%;
+    font-family: "Montserrat", sans-serif;
 }
 
 body {
-    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    background: #5f41e4;
+}
+
+.container {
+    max-width: 425px;
+
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+    background: #fff;
+
+    flex-grow: 1;
+}
+
+.search-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 25px;
+}
+
+.search-section .input-wrapper {
+    width: 100%;
+    height: 54px;
+
+    position: relative;
+}
+
+.search-section .search-icon {
+    font-size: 1.6rem;
+
+    position: absolute;
+
+    top: 50%;
+    left: 17px;
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+.search-section .search-input {
+    width: 100%;
+    height: 100%;
+
+    padding: 0 20px 0 50px;
+    border: 1px solid #beb0ff;
+
+    border-radius: 6px;
+    outline: none;
+
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    font-weight: 500;
+
+    transition: all 0.1s ease-in-out;
+}
+
+.search-section .search-input:focus {
+    border-color: #5f41e4;
+}
+
+.search-section .search-input::placeholder {
+    text-transform: none;
+}
+
+.search-section .location-button {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56px;
+    height: 54px;
+
+    border: 1px solid #beb0ff;
+
+    border-radius: 6px;
+    outline: none;
+
+    color: #5f41e4;
+    background: #fff;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+}
+
+.search-section .location-button:hover {
+    border-color: #5f41e4;
+
+    color: #fff;
+    background: #5f41e4;
+}
+
+.search-section .location-icon {
+    font-size: 2rem;
+}
+
+.weather-section .current-weather {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 20px 0 50px;
+}
+
+.current-weather .weather-icon {
+    width: 140px;
+    aspect-ratio: 1;
+}
+
+.current-weather .temperature {
+    display: flex;
+
+    margin: 23px 0;
+
+    font-size: 5.4rem;
+    font-weight: 700;
+}
+
+.current-weather .temperature span {
+    margin: 5px 0 2px;
+
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.current-weather .description {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.hourly-weather {
+    padding: 16px 25px;
+    border-top: 1px solid #d5ccff;
+}
+
+.hourly-weather .weather-list {
+    display: flex;
+    gap: 43px;
+
+    padding-bottom: 16px;
+    margin-bottom: -16px;
+
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.hourly-weather:hover .weather-list {
+    scrollbar-color: #bfbfbf transparent;
+}
+
+.hourly-weather .weather-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-direction: column;
+
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.hourly-weather .weather-item .weather-icon {
+    width: 28px;
+    height: 28px;
+}
+
+@media (max-width: 624px) {
+    body {
+        padding: 15px;
+    }
+
+    .search-section {
+        padding: 20px;
+    }
+
+    .hourly-weather {
+        padding: 16px 20px;
+    }
+
+    .hourly-weather .weather-list {
+        gap: 32px;
+    }
 }
