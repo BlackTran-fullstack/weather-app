@@ -29,6 +29,9 @@ body {
     background: #fff;
 
     flex-grow: 1;
+
+    position: relative;
+    overflow: hidden;
 }
 
 .search-section {
@@ -115,6 +118,42 @@ body {
 
 .search-section .location-icon {
     font-size: 2rem;
+}
+
+.no-results {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+
+    text-align: center;
+
+    position: absolute;
+}
+
+body.show-no-results .no-results {
+    display: flex;
+}
+
+.title {
+    margin: 25px 0 15px;
+
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+
+.message {
+    width: 80%;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+body.show-no-results .weather-section {
+    visibility: hidden;
 }
 
 .weather-section .current-weather {

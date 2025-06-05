@@ -64,9 +64,13 @@ function displayHourlyForecast(combinedHourlyData) {
 
 async function getWeatherDetails(API_URL) {
     window.innerWidth <= 768 && searchInput.blur();
+    document.body.classList.remove("show-no-results");
 
     try {
         const response = await fetch(API_URL);
+        if (!response.ok) {
+            document.body.classList.add("show-no-results");
+        }
         const data = await response.json();
 
         const weatherIcon = findWeatherIcon(data.current.condition.code);
@@ -145,3 +149,7 @@ locationButton.addEventListener("click", () => {
         console.log(error);
     }
 });
+
+getWeatherDetails(
+    `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=ho chi minh&days=2`
+);
