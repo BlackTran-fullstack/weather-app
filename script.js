@@ -3,7 +3,13 @@ import "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js";
 const searchInput = document.querySelector(".search-input");
 const locationButton = document.querySelector(".location-button");
 
+const location = localStorage.getItem("location") || "ho chi minh";
+
 const API_KEY = "ae4313ba250c4b8080e83509250406";
+
+function saveLocation(location) {
+    localStorage.setItem("location", location);
+}
 
 const weatherCodes = {
     clear: [1000],
@@ -98,6 +104,7 @@ async function getWeatherDetails(API_URL) {
         ];
 
         searchInput.value = data.location.name;
+        saveLocation(searchInput.value);
         displayHourlyForecast(combinedHourlyData);
     } catch (error) {
         console.log(error);
@@ -151,5 +158,5 @@ locationButton.addEventListener("click", () => {
 });
 
 getWeatherDetails(
-    `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=ho chi minh&days=2`
+    `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${location}&days=2`
 );
