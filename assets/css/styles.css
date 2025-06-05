@@ -158,12 +158,11 @@ body {
 
 .hourly-weather .weather-list {
     display: flex;
-    gap: 43px;
+    gap: 38px;
 
     padding-bottom: 16px;
     margin-bottom: -16px;
 
-    list-style: none;
     overflow-x: auto;
     overflow-y: hidden;
 

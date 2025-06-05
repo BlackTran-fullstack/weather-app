@@ -1,3 +1,5 @@
+import "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js";
+
 const searchInput = document.querySelector(".search-input");
 
 const API_KEY = "ae4313ba250c4b8080e83509250406";
@@ -19,16 +21,57 @@ const weatherCodes = {
     thunder_rain: [1273, 1276],
 };
 
+function findWeatherIcon(code) {
+    const weatherIcon = Object.keys(weatherCodes).find((icon) => {
+        return weatherCodes[icon].includes(code);
+    });
+
+    return weatherIcon;
+}
+
+function displayHourlyForecast(combinedHourlyData) {
+    const currentHour = dayjs();
+    const next24Hours = currentHour.add(24, "hour");
+
+    const next24HoursData = combinedHourlyData.filter(({ time }) => {
+        const forecastTime = dayjs(time);
+
+        return forecastTime >= currentHour && forecastTime <= next24Hours;
+    });
+
+    let weatherList = "";
+    console.log(next24HoursData);
+    next24HoursData.forEach((weather) => {
+        const weatherIcon = findWeatherIcon(weather.condition.code);
+
+        weatherList += `
+            <li class="weather-item">
+                <p class="time">${dayjs(weather.time).format("HH:00")}</p>
+
+                <img
+                    src="./assets/icons/${weatherIcon}.svg"
+                    alt=""
+                    class="weather-icon"
+                />
+
+                <p class="temperature">${Math.floor(weather.temp_c)}°</p>
+            </li>
+        `;
+    });
+
+    document.querySelector(".weather-list").innerHTML = weatherList;
+}
+
 async function getWeatherDetails(cityName) {
-    const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityName}`;
+    const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityName}&days=2`;
 
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        const weatherIcon = Object.keys(weatherCodes).find((icon) =>
-            weatherCodes[icon].includes(data.current.condition.code)
-        );
+        console.log(data);
+
+        const weatherIcon = findWeatherIcon(data.current.condition.code);
 
         const temperature = data.current.temp_c;
         const description = data.current.condition.text;
@@ -46,6 +89,13 @@ async function getWeatherDetails(cityName) {
 
             <p class="description">${description}</p>
         `;
+
+        const combinedHourlyData = [
+            ...data.forecast.forecastday[0].hour,
+            ...data.forecast.forecastday[1].hour,
+        ];
+
+        displayHourlyForecast(combinedHourlyData);
     } catch (error) {
         console.log(error);
     }
