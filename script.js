@@ -1,6 +1,7 @@
 import "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js";
 
 const searchInput = document.querySelector(".search-input");
+const locationButton = document.querySelector(".location-button");
 
 const API_KEY = "ae4313ba250c4b8080e83509250406";
 
@@ -40,7 +41,6 @@ function displayHourlyForecast(combinedHourlyData) {
     });
 
     let weatherList = "";
-    console.log(next24HoursData);
     next24HoursData.forEach((weather) => {
         const weatherIcon = findWeatherIcon(weather.condition.code);
 
@@ -62,14 +62,12 @@ function displayHourlyForecast(combinedHourlyData) {
     document.querySelector(".weather-list").innerHTML = weatherList;
 }
 
-async function getWeatherDetails(cityName) {
-    const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityName}&days=2`;
+async function getWeatherDetails(API_URL) {
+    window.innerWidth <= 768 && searchInput.blur();
 
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
-
-        console.log(data);
 
         const weatherIcon = findWeatherIcon(data.current.condition.code);
 
@@ -95,6 +93,7 @@ async function getWeatherDetails(cityName) {
             ...data.forecast.forecastday[1].hour,
         ];
 
+        searchInput.value = data.location.name;
         displayHourlyForecast(combinedHourlyData);
     } catch (error) {
         console.log(error);
@@ -105,6 +104,44 @@ searchInput.addEventListener("keyup", (event) => {
     const cityName = searchInput.value.trim();
 
     if (event.key === "Enter" && cityName) {
-        getWeatherDetails(cityName);
+        const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityName}&days=2`;
+        getWeatherDetails(API_URL);
+    }
+});
+
+locationButton.addEventListener("click", () => {
+    try {
+        if ("geolocation" in navigator) {
+            console.log("Geolocation supported!");
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+
+                const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${latitude},${longitude}&days=2`;
+                getWeatherDetails(API_URL);
+            },
+            (error) => {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        console.error("User denied location access.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        console.error("Unable to get location.");
+                        break;
+                    case error.TIMEOUT:
+                        console.error("Timeout while taking position.");
+                        break;
+                    default:
+                        console.error("Unknown error:", error.message);
+                        break;
+                }
+            }
+        );
+    } catch (error) {
+        console.log(error);
     }
 });
